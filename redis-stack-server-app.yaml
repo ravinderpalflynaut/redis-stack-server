@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/your-org/your-repo.git # Replace with your Git repository URL
+    repoURL: https://github.com/ravinderpalflynaut/redis-stack-server.git # Replace with your Git repository URL
     targetRevision: main
     path: kubernetes/redis-stack-server # Replace with the path to your manifests
   syncPolicy:
