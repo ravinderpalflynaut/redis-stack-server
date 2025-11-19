@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-secret
+type: Opaque
+data:
+  redis-password: WW91clN0cm9uZ1Bhc3N3b3JkMTIzIQ==   # Base64 of: YourStrongPassword123!
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-stack-server
+  labels:
+    app: redis-stack-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-stack-server
+  template:
+    metadata:
+      labels:
+        app: redis-stack-server
+    spec:
+      containers:
+      - name: redis-stack-server
+        image: redis/redis-stack-server:latest
+        env:
+        - name: REDIS_ARGS
+          value: "--requirepass $(REDIS_PASSWORD)"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-secret
+              key: redis-password
+        ports:
+        - containerPort: 6379
+        - containerPort: 8001
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: redis-stack-server-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-stack-server
+  labels:
+    app: redis-stack-server
+spec:
+  selector:
+    app: redis-stack-server
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: 6379
+  - name: redisinsight
+    port: 8001
+    targetPort: 8001
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-stack-server-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

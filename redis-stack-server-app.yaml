@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-stack-server
+  namespace: argocd
+spec:
+  destination:
+    namespace: default # Or your desired namespace
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/your-org/your-repo.git # Replace with your Git repository URL
+    targetRevision: main
+    path: kubernetes/redis-stack-server # Replace with the path to your manifests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
