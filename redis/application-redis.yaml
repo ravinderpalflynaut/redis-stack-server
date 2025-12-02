@@ -9,8 +9,8 @@ spec:
     repoURL: https://github.com/ravinderpalflynaut/redis-stack-server.git
     targetRevision: main
     path: redis
-    directory:
-      recurse: false
+#    directory:
+#      recurse: false
   destination:
     server: https://kubernetes.default.svc
     namespace: redis
