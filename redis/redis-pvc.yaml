@@ -4,7 +4,7 @@ metadata:
   name: redis-pvc
   namespace: redis
   annotations:
-    argocd.argoproj.io/sync-wave: "-5" # This ensures the PVC is created first
+    argocd.argoproj.io/sync-wave: "-1" # This ensures the PVC is created first
 spec:
   accessModes:
     - ReadWriteOnce
