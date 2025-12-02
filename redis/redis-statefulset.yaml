@@ -3,6 +3,8 @@ kind: StatefulSet
 metadata:
   name: redis-master
   namespace: redis
+  annotations:
+    argocd.argoproj.io/sync-wave: "1" # This ensures it waits for the PVC
 spec:
   serviceName: "redis-master"
   replicas: 1
